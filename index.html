@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW" class="scroll-smooth">
 <head>
@@ -29,14 +30,6 @@
         .touch-btn {
             touch-action: manipulation;
         }
-        /* Hide scrollbar for category pills container */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
         /* Dynamic scroll margin top for sticky header offset */
         .scroll-target {
             scroll-margin-top: var(--header-height, 160px);
@@ -45,7 +38,6 @@
 </head>
 <body class="bg-slate-100 min-h-screen pb-28 sm:pb-16 text-slate-800">
 
-    <!-- Sticky Mobile Header & Category Bar -->
     <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
         <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-2.5">
@@ -104,7 +96,6 @@
         </div>
     </header>
 
-    <!-- Main Container -->
     <main class="max-w-4xl mx-auto px-3 sm:px-6 pt-4 pb-6">
 
         <!-- Dynamic Category Containers -->
@@ -145,32 +136,32 @@
             </div>
 
             <!-- Copy and Reset Actions -->
-        <div class="mt-4 flex flex-col sm:flex-row items-center gap-2.5">
-            <button id="copy-btn" onclick="copySummary()" class="touch-btn w-full sm:w-auto flex-1 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-bold py-3.5 px-6 rounded-xl shadow-md shadow-orange-200 transition-all flex items-center justify-center space-x-2">
-                <i class="fa-regular fa-copy text-base"></i>
-                <span>複製訂購明細文字</span>
-            </button>
-            <button onclick="resetAll()" class="touch-btn w-full sm:w-auto bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-600 font-bold py-3.5 px-5 rounded-xl transition-all flex items-center justify-center space-x-2">
-                <i class="fa-solid fa-rotate-left text-xs"></i>
-                <span>清空重填</span>
-            </button>
+            <div class="mt-4 flex flex-col sm:flex-row items-center gap-2.5">
+                <button id="copy-btn" onclick="copySummary()" class="touch-btn w-full sm:w-auto flex-1 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-bold py-3.5 px-6 rounded-xl shadow-md shadow-orange-200 transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-regular fa-copy text-base"></i>
+                    <span>複製訂購明細文字</span>
+                </button>
+                <button onclick="resetAll()" class="touch-btn w-full sm:w-auto bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-600 font-bold py-3.5 px-5 rounded-xl transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-rotate-left text-xs"></i>
+                    <span>清空重填</span>
+                </button>
+            </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<!-- Mobile Fixed Bottom Action Bar -->
-<div class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-orange-50/95 backdrop-blur-md text-slate-800 border-t border-orange-200/80 px-4 py-2.5 shadow-2xl flex items-center justify-between">
-    <div>
-        <span id="mobile-item-count" class="text-[10px] text-slate-500 block font-bold">已選擇 0 項品項</span>
-        <span id="mobile-grand-total" class="text-xl font-black text-orange-600 font-mono tracking-tight">NT$ 0</span>
+    <!-- Mobile Fixed Bottom Action Bar -->
+    <div class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-orange-50/95 backdrop-blur-md text-slate-800 border-t border-orange-200/80 px-4 py-2.5 shadow-2xl flex items-center justify-between">
+        <div>
+            <span id="mobile-item-count" class="text-[10px] text-slate-500 block font-bold">已選擇 0 項品項</span>
+            <span id="mobile-grand-total" class="text-xl font-black text-orange-600 font-mono tracking-tight">NT$ 0</span>
+        </div>
+        <button onclick="scrollToCategory('summary-section')" class="touch-btn bg-orange-600 active:bg-orange-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md flex items-center space-x-1.5">
+            <i class="fa-solid fa-clipboard-list text-xs"></i>
+            <span>查看明細</span>
+        </button>
     </div>
-    <button onclick="scrollToCategory('summary-section')" class="touch-btn bg-orange-600 active:bg-orange-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md flex items-center space-x-1.5">
-        <i class="fa-solid fa-clipboard-list text-xs"></i>
-        <span>查看明細</span>
-    </button>
-</div>
 
-<!-- Toast Notification (Centered & Light Orange Theme) -->
+    <!-- Toast Notification -->
     <div id="toast" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-100 border border-orange-300 px-6 py-4 rounded-2xl shadow-xl shadow-orange-950/10 flex items-center space-x-3.5 transition-all duration-300 transform scale-90 opacity-0 pointer-events-none z-50 min-w-[240px] max-w-[90vw] justify-center">
         <i id="toast-icon" class="fa-solid fa-circle-check text-orange-600 text-xl"></i>
         <span id="toast-msg" class="text-sm sm:text-base font-bold text-orange-600">已成功複製訂購明細！</span>
@@ -284,8 +275,53 @@
             }
         ];
 
-        // Deep clone state
+        // Deep clone state & sticker state
         let categoriesData = JSON.parse(JSON.stringify(initialCategories));
+        let stickerData = {
+            lychee: 0,
+            apple: 0,
+            lycheeApple: 0,
+            peach: 0
+        };
+
+        function getMaxStickers() {
+            const canjuCat = categoriesData.find(c => c.id === 'canju');
+            if (!canjuCat) return 0;
+            const bottleItem = canjuCat.items.find(i => i.id === 'c18');
+            return bottleItem ? bottleItem.quantity * 5 : 0;
+        }
+
+        function updateSticker(type, change) {
+            const maxStickers = getMaxStickers();
+            const currentTotal = stickerData.lychee + stickerData.apple + stickerData.lycheeApple + stickerData.peach;
+            
+            if (change > 0 && currentTotal >= maxStickers) {
+                showToast(`貼紙總數已達上限 (${maxStickers}張)`, 'fa-circle-exclamation', 'text-amber-600');
+                return;
+            }
+
+            const newVal = stickerData[type] + change;
+            if (newVal >= 0) {
+                stickerData[type] = newVal;
+                render();
+            }
+        }
+
+        function setSticker(type, value) {
+            const val = parseInt(value, 10);
+            const qty = isNaN(val) || val < 0 ? 0 : val;
+            
+            const maxStickers = getMaxStickers();
+            const otherTotal = Object.keys(stickerData).reduce((sum, key) => key === type ? sum : sum + stickerData[key], 0);
+            
+            if (otherTotal + qty > maxStickers) {
+                stickerData[type] = Math.max(0, maxStickers - otherTotal);
+                showToast(`貼紙總數已自動調整至上限 (${maxStickers}張)`, 'fa-circle-exclamation', 'text-amber-600');
+            } else {
+                stickerData[type] = qty;
+            }
+            render();
+        }
 
         function render() {
             const container = document.getElementById('tables-container');
@@ -364,13 +400,100 @@
                     `;
                 });
 
+                // Check for bottles category free sticker selections
+                if (cat.id === 'canju') {
+                    const selectedStickers = [];
+                    if (stickerData.lychee > 0) selectedStickers.push(`荔枝 x ${stickerData.lychee}張`);
+                    if (stickerData.apple > 0) selectedStickers.push(`蘋果 x ${stickerData.apple}張`);
+                    if (stickerData.lycheeApple > 0) selectedStickers.push(`荔枝蘋果 x ${stickerData.lycheeApple}張`);
+                    if (stickerData.peach > 0) selectedStickers.push(`水蜜桃 x ${stickerData.peach}張`);
+                    if (selectedStickers.length > 0) {
+                        catSelectedLines.push(`• 贈送貼紙(一張21次)：${selectedStickers.join('、')}`);
+                    }
+                }
+
                 if (catSelectedLines.length > 0) {
                     let blockText = `【${cat.name}】\n` + catSelectedLines.join('\n');
-                    // 分隔線規則：當涼麵與冷凍上方已有其他分類時才加橫線
                     if (cat.hasDivider && summaryBlocks.length > 0) {
                         blockText = `--------------------\n` + blockText;
                     }
                     summaryBlocks.push(blockText);
+                }
+
+                let stickerBlockHtml = '';
+                if (cat.id === 'canju') {
+                    const maxStickers = getMaxStickers();
+                    const totalStickers = stickerData.lychee + stickerData.apple + stickerData.lycheeApple + stickerData.peach;
+                    stickerBlockHtml = `
+                        <div class="p-3 sm:p-4 bg-orange-50/70 border-t border-orange-100 rounded-b-2xl">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2.5">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xs sm:text-sm font-extrabold text-orange-900 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-note-sticky text-orange-600"></i>
+                                        贈送貼紙(一張21次)
+                                    </span>
+                                    <span class="text-[11px] font-bold text-orange-700 bg-orange-100/90 border border-orange-200 px-2 py-0.5 rounded-full">
+                                        已選 ${totalStickers} / ${maxStickers} 張
+                                    </span>
+                                </div>
+                                <p class="text-[11px] text-slate-500 font-medium">（未選擇貼紙則隨機出貨）</p>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <!-- Sticker 1 -->
+                                <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-orange-200/80 shadow-2xs">
+                                    <span class="text-xs font-bold text-slate-700">荔枝</span>
+                                    <div class="inline-flex items-center space-x-1 bg-slate-100 rounded-lg p-0.5 border border-slate-200">
+                                        <button type="button" onclick="updateSticker('lychee', -1)" ${stickerData.lychee <= 0 ? 'disabled' : ''} class="touch-btn w-7 h-7 rounded-md bg-white text-slate-800 shadow-xs active:bg-slate-200 flex items-center justify-center text-xs font-bold transition-all disabled:opacity-25">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                        <input type="number" min="0" value="${stickerData.lychee}" onchange="setSticker('lychee', this.value)" class="w-10 text-center bg-transparent text-xs font-extrabold text-slate-800 focus:outline-none font-mono">
+                                        <button type="button" onclick="updateSticker('lychee', 1)" class="touch-btn w-7 h-7 rounded-md bg-orange-600 text-white shadow-xs active:bg-orange-700 flex items-center justify-center text-xs font-bold transition-all">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Sticker 2 -->
+                                <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-orange-200/80 shadow-2xs">
+                                    <span class="text-xs font-bold text-slate-700">蘋果</span>
+                                    <div class="inline-flex items-center space-x-1 bg-slate-100 rounded-lg p-0.5 border border-slate-200">
+                                        <button type="button" onclick="updateSticker('apple', -1)" ${stickerData.apple <= 0 ? 'disabled' : ''} class="touch-btn w-7 h-7 rounded-md bg-white text-slate-800 shadow-xs active:bg-slate-200 flex items-center justify-center text-xs font-bold transition-all disabled:opacity-25">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                        <input type="number" min="0" value="${stickerData.apple}" onchange="setSticker('apple', this.value)" class="w-10 text-center bg-transparent text-xs font-extrabold text-slate-800 focus:outline-none font-mono">
+                                        <button type="button" onclick="updateSticker('apple', 1)" class="touch-btn w-7 h-7 rounded-md bg-orange-600 text-white shadow-xs active:bg-orange-700 flex items-center justify-center text-xs font-bold transition-all">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Sticker 3 -->
+                                <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-orange-200/80 shadow-2xs">
+                                    <span class="text-xs font-bold text-slate-700">荔枝蘋果</span>
+                                    <div class="inline-flex items-center space-x-1 bg-slate-100 rounded-lg p-0.5 border border-slate-200">
+                                        <button type="button" onclick="updateSticker('lycheeApple', -1)" ${stickerData.lycheeApple <= 0 ? 'disabled' : ''} class="touch-btn w-7 h-7 rounded-md bg-white text-slate-800 shadow-xs active:bg-slate-200 flex items-center justify-center text-xs font-bold transition-all disabled:opacity-25">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                        <input type="number" min="0" value="${stickerData.lycheeApple}" onchange="setSticker('lycheeApple', this.value)" class="w-10 text-center bg-transparent text-xs font-extrabold text-slate-800 focus:outline-none font-mono">
+                                        <button type="button" onclick="updateSticker('lycheeApple', 1)" class="touch-btn w-7 h-7 rounded-md bg-orange-600 text-white shadow-xs active:bg-orange-700 flex items-center justify-center text-xs font-bold transition-all">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Sticker 4 -->
+                                <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-orange-200/80 shadow-2xs">
+                                    <span class="text-xs font-bold text-slate-700">水蜜桃</span>
+                                    <div class="inline-flex items-center space-x-1 bg-slate-100 rounded-lg p-0.5 border border-slate-200">
+                                        <button type="button" onclick="updateSticker('peach', -1)" ${stickerData.peach <= 0 ? 'disabled' : ''} class="touch-btn w-7 h-7 rounded-md bg-white text-slate-800 shadow-xs active:bg-slate-200 flex items-center justify-center text-xs font-bold transition-all disabled:opacity-25">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                        <input type="number" min="0" value="${stickerData.peach}" onchange="setSticker('peach', this.value)" class="w-10 text-center bg-transparent text-xs font-extrabold text-slate-800 focus:outline-none font-mono">
+                                        <button type="button" onclick="updateSticker('peach', 1)" class="touch-btn w-7 h-7 rounded-md bg-orange-600 text-white shadow-xs active:bg-orange-700 flex items-center justify-center text-xs font-bold transition-all">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 }
 
                 htmlContent += `
@@ -408,6 +531,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        ${stickerBlockHtml}
                     </div>
                 `;
             });
@@ -471,6 +595,7 @@
                     item.quantity = 0;
                 });
             });
+            stickerData = { lychee: 0, apple: 0, lycheeApple: 0, peach: 0 };
             render();
             showToast('已清空所有點選數量', 'fa-rotate-left', 'text-orange-600');
         }
@@ -484,7 +609,6 @@
                 return;
             }
 
-            // Fallback clipboard logic for strict mobile iFrame context
             const textarea = document.createElement('textarea');
             textarea.value = textToCopy;
             textarea.style.position = 'fixed';
@@ -506,7 +630,6 @@
             }
         }
 
-        /* Nav Dropdown Controls */
         function updateHeaderHeight() {
             const header = document.querySelector('header');
             if (header) {
@@ -521,7 +644,7 @@
             const header = document.querySelector('header');
             if (target) {
                 const headerHeight = header ? header.offsetHeight : 140;
-                const extraPadding = 16; // 預留 16px 距離，讓表格標題完美呈現在導覽列下方
+                const extraPadding = 16;
                 const elementTop = target.getBoundingClientRect().top + window.pageYOffset;
                 const offsetPosition = elementTop - (headerHeight + extraPadding);
 
@@ -529,12 +652,6 @@
                     top: Math.max(0, offsetPosition),
                     behavior: 'smooth'
                 });
-            }
-            const menu = document.getElementById('nav-menu');
-            const arrow = document.getElementById('nav-arrow');
-            if (menu && !menu.classList.contains('hidden')) {
-                menu.classList.add('hidden');
-                if (arrow) arrow.classList.remove('rotate-180');
             }
         }
 
@@ -555,20 +672,6 @@
             }, 2200);
         }
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const navContainer = document.getElementById('nav-container');
-            const navMenu = document.getElementById('nav-menu');
-            const navArrow = document.getElementById('nav-arrow');
-            if (navContainer && !navContainer.contains(event.target)) {
-                if (navMenu && !navMenu.classList.contains('hidden')) {
-                    navMenu.classList.add('hidden');
-                    navArrow.classList.remove('rotate-180');
-                }
-            }
-        });
-
-        // Initialize view on page load
         window.onload = function() {
             render();
             updateHeaderHeight();
