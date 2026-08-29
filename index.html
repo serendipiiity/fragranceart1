@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>一碗螺｜訂貨計算器</title>
     <!-- 一碗螺品牌圖示 / 瀏覽器圓形圖示 -->
-    <link rel="icon" type="image/png" href="yiwanluo_favicon.png">
-    <link rel="apple-touch-icon" href="yiwanluo_logo.png">
+    <link rel="icon" type="image/png" href="https://serendipiiity.github.io/fragranceart1/yiwanluo_favicon.png">
+    <link rel="apple-touch-icon" href="https://serendipiiity.github.io/fragranceart1/yiwanluo_logo.png">
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/"></script>
     <!-- FontAwesome CDN for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Font Inter -->
@@ -20,8 +20,8 @@
             -webkit-tap-highlight-color: transparent;
         }
         /* Hide arrows in input number */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
@@ -50,264 +50,233 @@
 
 
         /* =========================================================
-           一碗螺品牌主題｜暖棕 × 米白 × 陶土紅
-           以品牌圖示主色 #91412A 為核心，讓整個計算器更像
-           一個完整的餐飲品牌工具，而不是一般後台表格。
+           一碗螺品牌主題｜紅陶 × 胭脂 × 米白
+           保留紅色調，增加深淺層次與柔和背景動畫。
            ========================================================= */
         :root {
-            --brand-brown: #91412A;
-            --brand-brown-dark: #64301F;
-            --brand-terracotta: #B65B3B;
-            --brand-cream: #FBF7F1;
-            --brand-cream-deep: #F3E9DE;
-            --brand-line: #E6D7CA;
-            --brand-text: #4D2A20;
-            --brand-muted: #8A6F63;
+            --brand-red-900: #5C2020;
+            --brand-red-800: #712727;
+            --brand-red-700: #8F3130;
+            --brand-red-600: #A9443E;
+            --brand-red-500: #BF5C50;
+            --brand-red-400: #D47C6D;
+            --brand-red-300: #E5A79B;
+            --brand-red-200: #F0CEC7;
+            --brand-red-100: #FCF3F1;
+            --brand-red-50:  #FCF4F1;
+            --brand-cream: #FFF9F6;
+            --brand-cream-deep: #F8EEE9;
+            --brand-line: #E9D2CC;
+            --brand-text: #4B2423;
+            --brand-muted: #8C6964;
         }
 
+        html { background: var(--brand-cream); }
         body {
+            position: relative;
+            overflow-x: hidden;
             background:
-                radial-gradient(circle at 8% 0%, rgba(182,91,59,.08), transparent 26%),
-                radial-gradient(circle at 92% 12%, rgba(145,65,42,.06), transparent 24%),
-                var(--brand-cream) !important;
+                radial-gradient(circle at 8% 4%, rgba(191,92,80,.13), transparent 26%),
+                radial-gradient(circle at 92% 16%, rgba(143,49,48,.10), transparent 24%),
+                linear-gradient(180deg, #FFF9F6 0%, #FCF3EF 46%, #F9ECE7 100%) !important;
             color: var(--brand-text) !important;
         }
+
+        /* Falling noodle bowls: slow decorative fall; bowls disappear after leaving the viewport */
+        .bowl-rain {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .noodle-bowl {
+            position: absolute;
+            width: var(--size);
+            height: calc(var(--size) * .82);
+            opacity: var(--opacity);
+            color: var(--tone);
+            will-change: transform;
+            filter: blur(.02px);
+        }
+        .noodle-bowl .bowl-body {
+            position: absolute;
+            left: 12%;
+            bottom: 1%;
+            width: 76%;
+            height: 48%;
+            border: max(1px, calc(var(--size) * .052)) solid currentColor;
+            border-top-width: max(1px, calc(var(--size) * .042));
+            border-radius: 8% 8% 48% 48% / 16% 16% 78% 78%;
+            box-sizing: border-box;
+        }
+        .noodle-bowl .rim {
+            position: absolute;
+            left: 8%;
+            bottom: 43%;
+            width: 84%;
+            height: 17%;
+            border: max(1px, calc(var(--size) * .046)) solid currentColor;
+            border-radius: 50%;
+            box-sizing: border-box;
+            background: rgba(255,249,246,.28);
+        }
+        .noodle-bowl .noodle {
+            position: absolute;
+            bottom: 51%;
+            width: 3%;
+            height: 28%;
+            border-radius: 999px;
+            background: currentColor;
+            transform-origin: bottom center;
+        }
+        .noodle-bowl .n1 { left: 35%; transform: rotate(-8deg); }
+        .noodle-bowl .n2 { left: 47%; height: 34%; transform: rotate(3deg); }
+        .noodle-bowl .n3 { left: 59%; height: 26%; transform: rotate(9deg); }
+        .noodle-bowl .chopstick,
+        .noodle-bowl .chopstick2 {
+            position: absolute;
+            left: 48%;
+            bottom: 55%;
+            width: 54%;
+            height: max(1px, calc(var(--size) * .037));
+            border-radius: 999px;
+            background: currentColor;
+            transform-origin: left center;
+        }
+        .noodle-bowl .chopstick { transform: rotate(-47deg); }
+        .noodle-bowl .chopstick2 { left: 44%; bottom: 60%; transform: rotate(-41deg); }
+        @media (max-width: 640px) {
+            .noodle-bowl { opacity: calc(var(--opacity) * .9); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .bowl-rain { display: none !important; }
+        }
+        #frontend-page, #backend-page { position: relative; z-index: 1; }
 
         header {
-            background: rgba(255,253,249,.94) !important;
+            background: rgba(255,249,246,.93) !important;
             border-color: var(--brand-line) !important;
-            box-shadow: 0 8px 30px rgba(100,48,31,.07) !important;
+            box-shadow: 0 8px 30px rgba(92,32,32,.08) !important;
         }
-
-        header h1,
-        h1, h2, h3, h4 {
-            color: var(--brand-text) !important;
-        }
+        header h1, h1, h2, h3, h4 { color: var(--brand-text) !important; }
 
         /* Header total */
         header [class~="bg-orange-50/80"] {
-            background: #F7EDE4 !important;
-            border-color: #E9CDBE !important;
+            background: linear-gradient(135deg, #FBEDEA, #F5DAD5) !important;
+            border-color: #EBC6BE !important;
         }
 
-        /* Primary brown buttons / numbers */
-        [class~="bg-orange-600"] {
-            background-color: var(--brand-brown) !important;
-        }
-        [class~="bg-orange-600"]:hover {
-            background-color: var(--brand-brown-dark) !important;
-        }
-        [class~="bg-orange-600"]:active {
-            background-color: #512518 !important;
-        }
-        [class~="text-orange-600"] {
-            color: var(--brand-brown) !important;
-        }
-        [class~="text-orange-700"] {
-            color: var(--brand-brown-dark) !important;
-        }
-        [class~="border-orange-100"],
-        [class~="border-orange-100/80"] {
-            border-color: #E9CDBE !important;
-        }
-        [class~="border-orange-200"],
-        [class~="border-orange-200/80"] {
-            border-color: #DFC2B1 !important;
-        }
-        [class~="bg-orange-50"],
-        [class~="bg-orange-50/70"] {
-            background-color: #FBF0E8 !important;
-        }
-        [class~="bg-orange-100"],
-        [class~="bg-orange-100/70"] {
-            background-color: #F3E3D8 !important;
-        }
-        [class~="bg-orange-100/80"] {
-            background-color: #F3E3D8 !important;
-        }
-        [class~="text-orange-900"] {
-            color: var(--brand-brown-dark) !important;
-        }
-        [class~="shadow-orange-200"] {
-            --tw-shadow-color: rgba(145,65,42,.18) !important;
-        }
+        /* Primary actions */
+        [class~="bg-orange-600"] { background-color: var(--brand-red-700) !important; }
+        [class~="bg-orange-600"]:hover { background-color: var(--brand-red-800) !important; }
+        [class~="bg-orange-600"]:active { background-color: var(--brand-red-900) !important; }
+        [class~="text-orange-600"] { color: var(--brand-red-700) !important; }
+        [class~="text-orange-700"], [class~="text-orange-900"] { color: var(--brand-red-800) !important; }
+        [class~="border-orange-100"], [class~="border-orange-100/80"] { border-color: #EFD7D1 !important; }
+        [class~="border-orange-200"], [class~="border-orange-200/80"] { border-color: #E7C2BA !important; }
+        [class~="bg-orange-50"], [class~="bg-orange-50/70"] { background-color: #FBEDE9 !important; }
+        [class~="bg-orange-100"], [class~="bg-orange-100/70"], [class~="bg-orange-100/80"] { background-color: #F5DCD6 !important; }
+        [class~="shadow-orange-200"] { --tw-shadow-color: rgba(143,49,48,.18) !important; }
 
         /* Warm neutral system */
-        [class~="bg-slate-100"] {
-            background-color: var(--brand-cream) !important;
-        }
-        [class~="bg-slate-50"],
-        [class~="bg-slate-50/60"],
-        [class~="bg-slate-50/80"] {
-            background-color: #F8F2EB !important;
-        }
-        [class~="bg-slate-100"] {
-            background-color: #F3EBE3 !important;
-        }
-        [class~="bg-white"] {
-            background-color: #FFFDF9 !important;
-        }
-        [class~="text-slate-900"],
-        [class~="text-slate-800"],
-        [class~="text-slate-700"] {
-            color: var(--brand-text) !important;
-        }
-        [class~="text-slate-600"],
-        [class~="text-slate-500"] {
-            color: var(--brand-muted) !important;
-        }
-        [class~="text-slate-400"] {
-            color: #A58D81 !important;
-        }
-        [class~="border-slate-200"],
-        [class~="border-slate-200/80"],
-        [class~="border-slate-200/60"],
-        [class~="border-slate-100"] {
-            border-color: var(--brand-line) !important;
-        }
+        [class~="bg-slate-50"], [class~="bg-slate-50/60"], [class~="bg-slate-50/80"] { background-color: #FCF5F2 !important; }
+        [class~="bg-slate-100"] { background-color: #F7ECE8 !important; }
+        [class~="bg-white"] { background-color: rgba(255,252,249,.97) !important; }
+        [class~="text-slate-900"], [class~="text-slate-800"], [class~="text-slate-700"] { color: var(--brand-text) !important; }
+        [class~="text-slate-600"], [class~="text-slate-500"] { color: var(--brand-muted) !important; }
+        [class~="text-slate-400"] { color: #AA8A84 !important; }
+        [class~="border-slate-200"], [class~="border-slate-200/80"], [class~="border-slate-200/60"], [class~="border-slate-100"] { border-color: var(--brand-line) !important; }
+        [class~="bg-slate-800"], [class~="bg-slate-900"] { background-color: var(--brand-red-900) !important; }
+        [class~="bg-slate-800"]:hover, [class~="bg-slate-900"]:hover { background-color: #481818 !important; }
 
-        /* Backend dark controls become the same brand brown */
-        [class~="bg-slate-800"] {
-            background-color: var(--brand-brown-dark) !important;
-        }
-        [class~="bg-slate-800"]:hover,
-        [class~="bg-slate-900"]:hover {
-            background-color: #4F2418 !important;
-        }
-        [class~="bg-slate-900"] {
-            background-color: var(--brand-brown-dark) !important;
-        }
-        [class~="text-slate-500"] {
-            color: var(--brand-muted) !important;
-        }
+        /* Category pills: same red family, deliberately different depth */
+        [class~="bg-amber-100/80"], [class~="bg-amber-100"] { background-color: #F8E5DE !important; }
+        [class~="bg-orange-100/80"], [class~="bg-orange-100"] { background-color: #F4D8D1 !important; }
+        [class~="bg-rose-100/80"], [class~="bg-rose-100"] { background-color: #F2CFCC !important; }
+        [class~="bg-emerald-100/80"], [class~="bg-emerald-100"] { background-color: #F7E1DC !important; }
+        [class~="bg-purple-100/80"], [class~="bg-purple-100"] { background-color: #EFCBC6 !important; }
+        [class~="bg-teal-100/80"], [class~="bg-teal-100"] { background-color: #F9E9E5 !important; }
+        [class~="bg-cyan-100/80"], [class~="bg-cyan-100"] { background-color: #EDD1CB !important; }
+        [class~="text-amber-700"], [class~="text-orange-700"], [class~="text-rose-700"], [class~="text-emerald-700"], [class~="text-purple-700"], [class~="text-teal-700"], [class~="text-cyan-700"],
+        [class~="text-amber-800"], [class~="text-orange-800"], [class~="text-rose-800"], [class~="text-emerald-800"], [class~="text-purple-800"], [class~="text-teal-800"], [class~="text-cyan-800"] { color: var(--brand-red-700) !important; }
+        [class~="border-amber-200"], [class~="border-orange-200"], [class~="border-rose-200"], [class~="border-emerald-200"], [class~="border-purple-200"], [class~="border-teal-200"], [class~="border-cyan-200"] { border-color: #E6C0B8 !important; }
 
-        /* Category pills: remove rainbow UI and use a consistent brand palette */
-        [class~="bg-amber-100/80"],
-        [class~="bg-orange-100/80"],
-        [class~="bg-rose-100/80"],
-        [class~="bg-emerald-100/80"],
-        [class~="bg-purple-100/80"],
-        [class~="bg-teal-100/80"],
-        [class~="bg-cyan-100/80"] {
-            background-color: #F5E8DD !important;
-            color: var(--brand-brown-dark) !important;
-            border-color: #E3CFC0 !important;
+        /* Top product-category buttons: one solid color each, progressively deeper from left to right. */
+        .category-quick-nav > button:nth-child(1) { background: #FEFAF9 !important; }
+        .category-quick-nav > button:nth-child(2) { background: #FCF3F1 !important; }
+        .category-quick-nav > button:nth-child(3) { background: #F8E8E4 !important; }
+        .category-quick-nav > button:nth-child(4) { background: #F3DCD7 !important; }
+        .category-quick-nav > button:nth-child(5) { background: #EDCEC7 !important; }
+        .category-quick-nav > button:nth-child(6) { background: #E5BCB4 !important; }
+        .category-quick-nav > button:nth-child(7) { background: #D9A49D !important; }
+        .category-quick-nav > button:nth-child(-n+7) {
+            border-color: rgba(122,41,41,.18) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.28);
         }
-        [class~="bg-amber-100"],
-        [class~="bg-orange-100"],
-        [class~="bg-rose-100"],
-        [class~="bg-emerald-100"],
-        [class~="bg-purple-100"],
-        [class~="bg-teal-100"],
-        [class~="bg-cyan-100"] {
-            background-color: #F5E8DD !important;
-            color: var(--brand-brown-dark) !important;
-            border-color: #E3CFC0 !important;
-        }
-        [class~="text-amber-700"],
-        [class~="text-orange-700"],
-        [class~="text-rose-700"],
-        [class~="text-emerald-700"],
-        [class~="text-purple-700"],
-        [class~="text-teal-700"],
-        [class~="text-cyan-700"],
-        [class~="text-amber-800"],
-        [class~="text-orange-800"],
-        [class~="text-rose-800"],
-        [class~="text-emerald-800"],
-        [class~="text-purple-800"],
-        [class~="text-teal-800"],
-        [class~="text-cyan-800"] {
-            color: var(--brand-brown) !important;
-        }
-        [class~="border-amber-200"],
-        [class~="border-orange-200"],
-        [class~="border-rose-200"],
-        [class~="border-emerald-200"],
-        [class~="border-purple-200"],
-        [class~="border-teal-200"],
-        [class~="border-cyan-200"] {
-            border-color: #E3CFC0 !important;
-        }
+        .category-quick-nav > button:nth-child(-n+7):hover { filter: brightness(.97); }
+        .category-quick-nav > button:nth-child(-n+7),
+        .category-quick-nav > button:nth-child(-n+7) i { color: #71302D !important; }
+        /* nth-child 8 = 訂購明細, nth-child 9 = 後台 — intentionally unchanged. */
 
         /* Category cards */
         #tables-container > div {
-            background: rgba(255,253,249,.97) !important;
+            background: rgba(255,252,249,.965) !important;
             border-color: var(--brand-line) !important;
-            box-shadow: 0 5px 18px rgba(100,48,31,.055) !important;
+            box-shadow: 0 7px 22px rgba(92,32,32,.055) !important;
         }
         #tables-container > div > div:first-child {
-            background: #F8F0E8 !important;
+            background: linear-gradient(90deg, #FBF1EE 0%, #F7E5E0 100%) !important;
             border-color: var(--brand-line) !important;
         }
 
-        /* Quantity controls */
-        input[type="number"],
-        textarea,
-        #summary-box,
-        #backend-output {
-            background-color: #FBF7F2 !important;
+        input[type="number"], textarea, #summary-box, #backend-output {
+            background-color: #FFF9F6 !important;
             border-color: var(--brand-line) !important;
             color: var(--brand-text) !important;
         }
-        input[type="number"]:focus,
-        textarea:focus {
-            --tw-ring-color: rgba(145,65,42,.28) !important;
-            border-color: #C78D73 !important;
+        input[type="number"]:focus, textarea:focus {
+            --tw-ring-color: rgba(143,49,48,.25) !important;
+            border-color: var(--brand-red-400) !important;
         }
-        .inline-flex.items-center.space-x-1.5,
-        .inline-flex.items-center.space-x-1 {
-            background: #F1E7DE !important;
-            border-color: #E0CFC1 !important;
+        .inline-flex.items-center.space-x-1.5, .inline-flex.items-center.space-x-1 {
+            background: #F5E4DF !important;
+            border-color: #E7CFC8 !important;
         }
 
-        /* Total card */
         .brand-total-card {
-            background: linear-gradient(135deg, #F8E9DE 0%, #F3DED0 55%, #FBF3EC 100%) !important;
-            border-color: #E1C4B4 !important;
-            box-shadow: 0 10px 26px rgba(145,65,42,.09) !important;
+            background: linear-gradient(135deg, #F8E4DE 0%, #EFC9C1 52%, #FAEEE9 100%) !important;
+            border-color: #E1B7AE !important;
+            box-shadow: 0 12px 30px rgba(143,49,48,.11) !important;
         }
-
-        /* Summary section */
         #summary-section {
-            background: #FFFDF9 !important;
+            background: rgba(255,252,249,.97) !important;
             border-color: var(--brand-line) !important;
-            box-shadow: 0 7px 22px rgba(100,48,31,.06) !important;
+            box-shadow: 0 8px 24px rgba(92,32,32,.07) !important;
         }
-
-        /* Small badges */
-        [class~="bg-orange-50"] {
-            background-color: #F8EAE0 !important;
-        }
-
-        /* Give the logo a subtle brand halo */
-        header img[alt="一碗螺"] {
-            filter: drop-shadow(0 2px 4px rgba(145,65,42,.10));
-        }
-
-        /* Mobile bottom bar */
+        header img[alt="一碗螺"] { filter: drop-shadow(0 2px 5px rgba(143,49,48,.13)); }
         #frontend-mobile-bar {
-            background: rgba(250,240,232,.96) !important;
-            border-color: #E2C9BA !important;
-            box-shadow: 0 -8px 24px rgba(100,48,31,.10) !important;
+            background: rgba(248,232,228,.96) !important;
+            border-color: #E4BDB5 !important;
+            box-shadow: 0 -8px 24px rgba(92,32,32,.10) !important;
         }
-
-        /* Links / focus */
-        button:focus-visible,
-        input:focus-visible,
-        textarea:focus-visible {
-            outline: 2px solid rgba(145,65,42,.32);
+        button:focus-visible, input:focus-visible, textarea:focus-visible {
+            outline: 2px solid rgba(143,49,48,.34);
             outline-offset: 2px;
         }
+
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen pb-28 sm:pb-16 text-slate-800">
+
+    <!-- Decorative falling noodle bowls -->
+    <div id="bowl-rain" class="bowl-rain" aria-hidden="true"></div>
 
     <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
         <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-2.5">
                 <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#FFFDF9] flex items-center justify-center overflow-hidden shadow-md border-2 border-[#E7D5C8]">
-                    <img src="yiwanluo_favicon.png" alt="一碗螺" class="w-full h-full object-cover">
+                    <img src="https://serendipiiity.github.io/fragranceart1/yiwanluo_favicon.png" alt="一碗螺" class="w-full h-full object-cover">
                 </div>
                 <div>
                     <h1 class="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight leading-tight">一碗螺｜訂貨計算器</h1>
@@ -324,7 +293,7 @@
 
         <!-- Responsive Flex-Wrap Category Quick Pills -->
         <div class="border-t border-slate-100 bg-slate-50/80 px-3 py-2.5">
-            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 max-w-4xl mx-auto">
+            <div class="category-quick-nav flex flex-wrap items-center gap-1.5 sm:gap-2 max-w-4xl mx-auto">
                 <button onclick="scrollToCategory('luosifen')" class="touch-btn px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs font-bold bg-amber-100/80 text-amber-900 border border-amber-200/80 hover:bg-amber-200 active:scale-95 transition-all flex items-center space-x-1.5">
                     <i class="fa-solid fa-bowl-food text-amber-700 text-xs"></i>
                     <span>螺獅粉醬料</span>
@@ -563,6 +532,60 @@
     </div>
 
     <script>
+        /* Decorative noodle-bowl rain. Bowls fall slowly and disappear after leaving the viewport. */
+        (function initNoodleBowlRain() {
+            const layer = document.getElementById('bowl-rain');
+            if (!layer || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            const tones = ['#7A2929', '#8F3130', '#A9443E', '#BF5C50', '#D47C6D'];
+
+            function makeBowl(size, tone, opacity) {
+                const el = document.createElement('span');
+                el.className = 'noodle-bowl';
+                el.style.setProperty('--size', size + 'px');
+                el.style.setProperty('--tone', tone);
+                el.style.setProperty('--opacity', opacity);
+                el.innerHTML = '<span class="noodle n1"></span><span class="noodle n2"></span><span class="noodle n3"></span><span class="chopstick"></span><span class="chopstick2"></span><span class="rim"></span><span class="bowl-body"></span>';
+                return el;
+            }
+
+            function spawnNoodleBowl() {
+                const mobile = window.innerWidth <= 640;
+                const size = mobile ? 20 + Math.random() * 12 : 22 + Math.random() * 16;
+                const x = Math.max(4, Math.random() * (window.innerWidth - size - 8));
+                const drift = (Math.random() - .5) * (mobile ? 34 : 68);
+                const duration = (mobile ? 14500 : 16500) + Math.random() * 5500;
+                const tone = tones[Math.floor(Math.random() * tones.length)];
+                const opacity = mobile ? (.078 + Math.random() * .042) : (.066 + Math.random() * .048);
+                const startRotate = -14 + Math.random() * 28;
+                const endRotate = startRotate + (-20 + Math.random() * 40);
+                const bowl = makeBowl(size, tone, opacity.toFixed(3));
+                bowl.style.left = x + 'px';
+                bowl.style.top = (-size - 12) + 'px';
+                layer.appendChild(bowl);
+
+                const travelY = window.innerHeight + size + 28;
+                const animation = bowl.animate([
+                    { transform: `translate3d(0,0,0) rotate(${startRotate}deg)` },
+                    { transform: `translate3d(${drift * .65}px,${travelY * .55}px,0) rotate(${startRotate + 7}deg)`, offset: .55 },
+                    { transform: `translate3d(${drift}px,${travelY}px,0) rotate(${endRotate}deg)` }
+                ], {
+                    duration,
+                    easing: 'linear',
+                    fill: 'forwards'
+                });
+
+                animation.onfinish = () => bowl.remove();
+            }
+
+            // Start gently, then keep the background movement sparse and slow.
+            const initialCount = window.innerWidth <= 640 ? 3 : 5;
+            for (let i = 0; i < initialCount; i++) {
+                window.setTimeout(spawnNoodleBowl, 500 + i * 1400);
+            }
+            window.setInterval(spawnNoodleBowl, window.innerWidth <= 640 ? 6200 : 5000);
+        })();
+
         /* Product Category Data Definition */
         const initialCategories = [
             {
