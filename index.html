@@ -312,7 +312,47 @@
             color: #5C2020 !important;
         }
 
-    </style>
+
+        /* Backend uses Chiron GoRound TC as well */
+        #backend-page,
+        #backend-page input,
+        #backend-page textarea,
+        #backend-page button,
+        #backend-page #backend-output,
+        #backend-page .font-mono,
+        #backend-page .font-sans {
+            font-family: "Chiron GoRound TC", sans-serif !important;
+            font-optical-sizing: auto;
+            font-style: normal;
+        }
+
+    
+        /* All monetary amounts use Chiron GoRound TC */
+        #header-grand-total, #grand-total, #mobile-grand-total,
+        #tables-container .font-mono {
+            font-family: "Chiron GoRound TC", sans-serif !important;
+            font-optical-sizing: auto;
+            font-style: normal;
+        }
+
+        /* Order summary area uses Chiron GoRound TC */
+        #summary-section,
+        #summary-box,
+        #summary-box * {
+            font-family: "Chiron GoRound TC", sans-serif !important;
+            font-optical-sizing: auto;
+            font-style: normal;
+        }
+
+        /* Keep Font Awesome symbols/icons visible inside the order summary area */
+        #summary-section i.fa-solid,
+        #summary-section i.fa-regular,
+        #summary-section i.fa-brands {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+            font-optical-sizing: normal;
+            font-style: normal;
+        }
+</style>
 </head>
 <body class="bg-slate-100 min-h-screen pb-28 sm:pb-16 text-slate-800">
 
