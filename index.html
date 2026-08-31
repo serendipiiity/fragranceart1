@@ -170,6 +170,24 @@
         }
         #frontend-page, #backend-page { position: relative; z-index: 1; }
 
+        /* Backend: force all regular text to use Chiron GoRound TC without overriding Font Awesome icons. */
+        #backend-page,
+        #backend-page input,
+        #backend-page textarea,
+        #backend-page button,
+        #backend-page label,
+        #backend-page p,
+        #backend-page h2,
+        #backend-page h3,
+        #backend-page div:not(.fa):not(.fas):not(.far):not(.fab) {
+            font-family: "Chiron GoRound TC", sans-serif !important;
+            font-optical-sizing: auto;
+            font-style: normal;
+        }
+        #backend-page i[class*="fa-"] {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+
         header {
             background: rgba(255,249,246,.93) !important;
             border-color: var(--brand-line) !important;
@@ -303,6 +321,14 @@
             background-color: #EFCBC6 !important;
             border-color: #DDA9A1 !important;
         }
+        /* Backend password input + placeholder: force Chiron GoRound TC */
+        #backend-password,
+        #backend-password::placeholder {
+            font-family: "Chiron GoRound TC", sans-serif !important;
+            font-optical-sizing: auto;
+            font-style: normal;
+        }
+
         #backend-output .backend-code.code-selected,
         #backend-output [data-code].code-selected,
         #backend-output button.code-selected,
@@ -1279,7 +1305,7 @@
                 .join('|') + ')', 'g');
 
             const safeText = escapeHtml(output);
-            box.innerHTML = safeText.replace(codePattern, '<span class="backend-code backend-code inline-block cursor-pointer rounded px-0.5 -mx-0.5 hover:bg-orange-100 hover:text-orange-700 select-text" onclick="copyProductCode(this.textContent)" title="點一下複製品號">$1</span>');
+            box.innerHTML = safeText.replace(codePattern, '<span class="backend-code backend-code inline-block cursor-pointer rounded px-0.5 -mx-0.5 hover:bg-orange-100 hover:text-orange-700 select-text" onclick="copyProductCode(this.textContent, this)" title="點一下複製品號">$1</span>');
         }
 
         function convertBackendText() {
@@ -1346,8 +1372,15 @@
             return successful;
         }
 
-        function copyProductCode(code) {
+        function copyProductCode(code, element) {
             if (!code) return;
+
+            // 點選品號後保留較深的底色，方便辨識剛剛複製的品號。
+            const output = document.getElementById('backend-output');
+            if (output) {
+                output.querySelectorAll('.code-selected').forEach(el => el.classList.remove('code-selected'));
+            }
+            if (element) element.classList.add('code-selected');
             if (copyText(code)) {
                 showToast(`已複製品號：${code}`, 'fa-copy', 'text-orange-600');
             } else {
